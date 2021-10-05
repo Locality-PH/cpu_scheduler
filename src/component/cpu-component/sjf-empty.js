@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Table , Row, Col, Result } from "antd";
+import { Table , Row, Col} from "antd";
+import { BsSquareFill } from 'react-icons/bs';
 
 let arrival;
 let burst;
@@ -8,11 +9,24 @@ let processID = [];
 let waitingTime= [];
 let turnAroundTime = [];
 let finishTime = [];
-let colortag = ["#0085c3","#7ab800","#f2af00", "#dc5034","#ce1126","#0085c3"]
+let colortag = [
+  "#0085c3",
+  "#7ab800",
+  "#f2af00",
+  "#dc5034",
+  "#ce1126",
+  "#0085c3",
+  "#7FFF00",
+  "#00FFFF",
+  "#FF1493",
+  "#FFFAF0",
+];
 let letGanttChart = [], ganttChart = [];
 let sortIndex = []
 let averagetat = [],averagewt = [];
 let arrangeTableVal = []
+
+let legend = []
 
 class SJFEmpty extends Component {
   constructor(props) {
@@ -173,7 +187,7 @@ class SJFEmpty extends Component {
         let isWaiting = true
         if(isWaiting == true){
           ct = Math.abs(ct - [indexList[i][1]])
-          finalValue.push([ct, bt[indexList[i][0]], "-"])
+          finalValue.push([indexList[i][1], bt[indexList[i][0]], "-"])
           isWaiting = true      
         }
         ct = indexList[i][1] + indexList[i][2]
@@ -181,6 +195,7 @@ class SJFEmpty extends Component {
       }
     }
 
+    // console.log(finalValue)
     return finalValue
   }
 
@@ -255,6 +270,25 @@ class SJFEmpty extends Component {
     return [finalValue, wt.length, Math.round(((finalValue/wt.length) + Number.EPSILON) * 100) / 100]
   }
 
+  ganttChartLegend(gc){
+    let finalValue = []
+    
+    for(var i = 0; i < gc.length;i++){
+      let gcColor = colortag[(i) % 10]
+      let p = "P" + gc[i][2][0]
+
+      if(gc[i][2][0] != "-"){
+        finalValue.push({
+          color: gcColor,
+          name: p
+        })
+      }
+
+    }
+
+    return finalValue
+  }
+
   // Sorting the final value
   arrangeTableValue = (si, gc, at ,bt, finishTime, turnAroundTime, waitingTime, l) => {
     let newPID = []
@@ -305,16 +339,33 @@ class SJFEmpty extends Component {
     }
 
     for (var i = 0; i < gc.length; i++) {
-      let gcColor = colortag[(i) % 6]
+      let gcColor = colortag[(i) % 10]
       let p = "P" + gc[i][2][0]
+      let start
+      let duration
+      let end = gc[i][0]
+
+      if(i == 0){
+        start = at[i]
+      }
+      else{
+        start = gc[i - 1][0]
+      }
+
       if(gc[i][2][0] == "-"){
-        gcColor = "#000000"
+        gcColor = "grey"
         p = "-"
+        duration = Math.abs(start - end)
+      }else{
+        duration = gc[i][1]
       }
       letGanttChart.push({
         value: gc[i][1],
         color: gcColor,
-        description: p
+        description: "\nStart: " + start +"\n"+
+        "Duration: " + duration + "\n"+
+        "End: "+ end,
+        name: p
       })
       
     }
@@ -349,6 +400,8 @@ class SJFEmpty extends Component {
     averagewt = this.waitingTimeAverage(waitingTime);
     averagetat = this.turnAroundTimeAverage(turnAroundTime);
 
+    legend = this.ganttChartLegend(ganttChart)
+
     // Just sorting the final value
     arrangeTableVal = this.arrangeTableValue(sortIndex, ganttChart, arrival, burst, finishTime, turnAroundTime, waitingTime, length)
     processID = arrangeTableVal[0]
@@ -362,6 +415,16 @@ class SJFEmpty extends Component {
     return (
       
       <>
+        <Row align="middle" justify="center">
+          {legend.map((result, i) =>
+              <Col style={{ margin: "0px 8px" }}>
+                {result.name} <BsSquareFill style={{ color: result.color, margin: "-2px 0px" }} />
+              </Col>
+          )}
+          <Col style={{ margin: "0px 8px" }}>
+              Idle CPU <BsSquareFill style={{ color: "grey", margin: "-2px 0px" }} />
+          </Col>
+        </Row>
     
         <div > 
 

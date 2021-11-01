@@ -12,6 +12,7 @@ let colortag = ["#0085c3","#7ab800","#f2af00", "#dc5034","#ce1126","#0085c3"]
 let letGanttChart = [], ganttChart = [];
 let sortIndex = []
 let averagetat = [],averagewt = [];
+let arrangeTableVal = []
 
 class SJFEmpty extends Component {
   constructor(props) {
@@ -94,20 +95,20 @@ class SJFEmpty extends Component {
     let finalValue = []
     let startingIndex = at.indexOf(Math.min(...at))
 
-    finalValue.push([startingIndex, 0])
+    finalValue.push([startingIndex, 0, 0])
 
     for(var i = 0; i < l; i++){
       if(i != startingIndex){
-        finalValue.push([i, bt[i]])
+        finalValue.push([i, at[i], bt[i]])
       }
     }
 
     finalValue.sort(function(a, b) {
-      return a[1] - b[1];
+      return a[2] - b[2];
     });
 
-    finalValue[0] = [startingIndex, bt[startingIndex]]
-
+    finalValue[0] = [startingIndex, at[startingIndex], bt[startingIndex]]
+    // console.log(finalValue)
     return finalValue;
 
   }
@@ -117,19 +118,19 @@ class SJFEmpty extends Component {
     let ct = 0
 
     for(var i = 0; i < l; i++){
-        ct = ct + indexList[i][1]
+        ct = ct + indexList[i][2]
         finalValue.push([ct, bt[indexList[i][0]], pid[indexList[i][0]]])
     }
 
     return finalValue
   }
 
-  calculateFinishTime(indexList, l){
+  calculateFinishTime(indexList, l, at){
     let finalValue = []
-    let ct = 0
+    let ct = at[indexList[0][0]]
 
     for(var i = 0; i < l; i++){
-      ct = ct + indexList[i][1]
+      ct = ct + indexList[i][2]
       finalValue[indexList[i][0]] = ct
   }
     return finalValue
@@ -149,7 +150,6 @@ class SJFEmpty extends Component {
       finalValue = finalValue + tat[i]
     }
 
-
     return [finalValue, tat.length, Math.round(((finalValue/tat.length) + Number.EPSILON) * 100) / 100]
   }
 
@@ -168,6 +168,44 @@ class SJFEmpty extends Component {
     }
 
     return [finalValue, wt.length, Math.round(((finalValue/wt.length) + Number.EPSILON) * 100) / 100]
+  }
+
+  arrangeTableValue = (si, gc, at ,bt, finishTime, turnAroundTime, waitingTime, l) => {
+    let val = []
+    val = si
+    
+    for(var i = 0; i < l; i++){
+      val[i][1] = at[i]
+      val[i][2] = bt[i]
+      val[i][3] = finishTime[i]
+      val[i][4] = turnAroundTime[i]
+      val[i][5] = waitingTime[i]
+    }
+
+    val.sort(function(a, b) {
+      return a[1] - b[1];
+    });
+
+    let newProcessID = []
+    let newAt = []
+    let newBt = []
+    let newFinishTime = []
+    let newTurnAroundTime = []
+    let newWaitingTime = []
+
+    for(var j = 0; j < l; j++){
+      newProcessID.push(gc[j][2][0])
+      newAt.push(val[j][1])
+      newBt.push(val[j][2])
+      newFinishTime.push(val[j][3])
+      newTurnAroundTime.push(val[j][4])
+      newWaitingTime.push(val[j][5])
+    }
+
+    arrival = newAt
+    burst = newBt
+    
+    return[newFinishTime, newTurnAroundTime, newWaitingTime, newProcessID]
   }
 
   tableDataOutputProcess = (at, bt, ct,tat,wt, l, pid, gc) => {
@@ -213,12 +251,19 @@ class SJFEmpty extends Component {
     sortIndex = this.sortAccordingArrivalTimeAndBurstTime(arrival, burst, length)
 
     ganttChart = this.calculateGanttChart(sortIndex, burst, length, processID)
-    finishTime = this.calculateFinishTime(sortIndex, length)
+    finishTime = this.calculateFinishTime(sortIndex, length, arrival)
     turnAroundTime = this.calculateTurnAroundTime(arrival, finishTime, length)
     waitingTime = this.calculateWaitingTime(burst, turnAroundTime, length)
     
     averagewt = this.waitingTimeAverage(waitingTime);
     averagetat = this.turnAroundTimeAverage(turnAroundTime);
+
+    // // Just sorting the final value
+    // arrangeTableVal = this.arrangeTableValue(sortIndex, ganttChart, arrival, burst, finishTime, turnAroundTime, waitingTime, length)
+    // finishTime = arrangeTableVal[0]
+    // turnAroundTime = arrangeTableVal[1]
+    // waitingTime = arrangeTableVal[2]
+    // processID = arrangeTableVal[3]
 
     this.tableDataOutputProcess(arrival,burst ,finishTime,turnAroundTime,waitingTime,length, processID, ganttChart)
 

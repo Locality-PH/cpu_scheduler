@@ -1,16 +1,30 @@
 import React, { Component } from "react";
-import { Table   , Row, Col} from "antd";
+import { Table, Row, Col } from "antd";
 let arrival;
 let burst;
 let priority;
 let length;
 let processID = [];
-let waitingTime= [];
+let waitingTime = [];
 let turnAroundTime = [];
 let finishTime = [];
-let colortag = ["#0085c3","#7ab800","#f2af00", "#dc5034","#ce1126","#0085c3", "#7FFF00","#00FFFF" ,"#FF1493", "#FFFAF0" ]
+let colortag = [
+  "#0085c3",
+  "#7ab800",
+  "#f2af00",
+  "#dc5034",
+  "#ce1126",
+  "#0085c3",
+  "#7FFF00",
+  "#00FFFF",
+  "#FF1493",
+  "#FFFAF0",
+];
 let letGanttChart = [];
-let sum1=0, sum2=0 , averagetat,averagewt ;
+let sum1 = 0,
+  sum2 = 0,
+  averagetat,
+  averagewt;
 let tmpsum1, tmpsum2;
 
 class PriorityEmpty extends Component {
@@ -27,7 +41,6 @@ class PriorityEmpty extends Component {
       dataSource: [],
       ganttChart: [],
       columns: [
-        
         {
           title: () => <div className="text-center">Job</div>,
           key: "job",
@@ -62,7 +75,6 @@ class PriorityEmpty extends Component {
     };
   }
 
-
   calculateProcessId = (l) => {
     let pid = 0;
     for (var i = 0; i < l; i++) {
@@ -70,69 +82,104 @@ class PriorityEmpty extends Component {
     }
   };
 
- calculateWaitingTime = (at, bt) => {
-        finishTime[0] = at[0] + bt[0];
-        // console.log(finishTime[0])
-        turnAroundTime[0] = finishTime[0] - at[0];
-        waitingTime[0] = turnAroundTime[0] - bt[0];
-        for (var i = 1; i < length; i++) 
-        {
-            finishTime[i] = bt[i] + finishTime[i - 1];
-            turnAroundTime[i] = ((finishTime[i] - at[i]) > 0 ? finishTime[i] - at[i] : 0 );
-            waitingTime[i] = ((turnAroundTime[i] - bt[i]) > 0 ? turnAroundTime[i] - bt[i] : 0);
-        }
-        for (var i = 0; i < length; i++) 
-        {
-            sum1 += turnAroundTime[i]
-            sum2 += waitingTime[i] 
-           
-        }
-        tmpsum1 =  sum1
-        tmpsum2 = sum2
-        console.log("sum1"+ sum1)
-        averagetat =  Math.round(((sum1/length) + Number.EPSILON) * 100) / 100;
-        averagewt =  Math.round(((sum2/length) + Number.EPSILON) * 100) / 100;
-  
+  calculateWaitingTimeAndGanttChart = (at, bt, pid) => {
+    let n = true;
+    let count, empty, blank;
 
-
- }
- tableDataOutputProcess = (at, bt, prt,ct,tat,wt, l, pid) => {
-  let n = 0;
-  for (var i = 0; i < l; i++) {
-    this.state.dataSource.push({
-      key: n+=1,
-      job: "P" + (pid[i]),
-      arrival: at[i],
-      burst: bt[i],
-      priority: prt[i],
-      ct: ct[i],
-      tat: tat[i],
-      wt: wt[i],
-    });
+    // PROCESS 1
+    finishTime[0] = at[0] + bt[0];
+    turnAroundTime[0] = finishTime[0] - at[0];
+    waitingTime[0] = turnAroundTime[0] - bt[0];
+    count = finishTime[0];
+    // PUSH TO GANTTCHART
     letGanttChart.push({
-      value: bt[i],
-      color: colortag[(i) % 10],
-      description: "P" + (pid[i])
-    })
+      value: bt[0],
+      color: colortag[0 % 10],
+      description: "P" + processID[0],
+    });
+    // for (var i = 1; i < length; i++) {
+    //   // finishTime[i] = bt[i] + finishTime[i - 1];
+    //   // turnAroundTime[i] = Math.abs(finishTime[i] - at[i]) // > 0 ? finishTime[i] - at[i] : 0;
+    //   // waitingTime[i] = Math.abs(turnAroundTime[i] - bt[i]) // > 0 ? turnAroundTime[i] - bt[i] : 0;
+    //   console.log("finishtime:" + finishTime[i]+ "finishtime -1:" +finishTime[i-1]);
 
-    
-  }
+    // }
+    for (var i = 1; i < length; i++) {
+      empty = bt[i];
+      while (n) {
+        count += 1;
+        blank += 1;
+        console.log(
+          "count: " + count + " arrival: " + at[i] + " burst: " + bt[i]
+        );
+        if (at[i] == count) {
+          letGanttChart.push({
+            value: blank,
+            color: "#000000",
+            description: "-",
+          });
+        }
+        if (at[i] < count) {
+          empty -= 1;
+          if (empty == 0) {
+            n = false;
+            blank = 0;
+            finishTime[i] = count;
+            turnAroundTime[i] = Math.abs(finishTime[i] - at[i]); // > 0 ? finishTime[i] - at[i] : 0;
+            waitingTime[i] = Math.abs(turnAroundTime[i] - bt[i]); // > 0 ? turnAroundTime[i] - bt[i] : 0;
+            console.log("counting " + count);
+            letGanttChart.push({
+              value: bt[i],
+              color: colortag[i % 10],
+              description: "P" + pid[i],
+            });
+          }
+        }
+      }
+      n = true;
+    }
+    count = 0;
+    empty = 0;
+    for (var i = 0; i < length; i++) {
+      sum1 += turnAroundTime[i];
+      sum2 += waitingTime[i];
+    }
+    tmpsum1 = sum1;
+    tmpsum2 = sum2;
+    console.log("sum1" + sum1);
+    averagetat = Math.round((sum1 / length + Number.EPSILON) * 100) / 100;
+    averagewt = Math.round((sum2 / length + Number.EPSILON) * 100) / 100;
+  };
 
-letGanttChart = []
-   processID = []
-   waitingTime= []
-   turnAroundTime = []
-   finishTime = []
-   arrival = []
-   burst = []
-   priority = []
-   finishTime = []
-   turnAroundTime=[]
-   waitingTime=[]
-   sum1 = 0
-   sum2 = 0
- }
+  tableDataOutputProcess = (at, bt, prt, ct, tat, wt, l, pid) => {
+    let n = 0;
+    for (var i = 0; i < l; i++) {
+      this.state.dataSource.push({
+        key: (n += 1),
+        job: "P" + pid[i],
+        arrival: at[i],
+        burst: bt[i],
+        priority: prt[i],
+        ct: ct[i],
+        tat: tat[i],
+        wt: wt[i],
+      });
+    }
 
+    letGanttChart = [];
+    processID = [];
+    waitingTime = [];
+    turnAroundTime = [];
+    finishTime = [];
+    arrival = [];
+    burst = [];
+    priority = [];
+    finishTime = [];
+    turnAroundTime = [];
+    waitingTime = [];
+    sum1 = 0;
+    sum2 = 0;
+  };
 
   sortAccordingArrivalTimeAndPriority = (at, bt, prt, pid) => {
     let temp;
@@ -191,10 +238,10 @@ letGanttChart = []
     burst = bt;
     priority = prt;
   };
-       // MVP THIS IS THE MOST FUCKING IMPORTANT CODE FOR THE GANTT CHART TOOK ME 10 HRS TO FIND THIS SHITTY DOCUMENTATION
-  componentDidMount() {   
-     this.props.updateGanttChart.selectGanttChart(letGanttChart)  
-    }
+  // MVP THIS IS THE MOST FUCKING IMPORTANT CODE FOR THE GANTT CHART TOOK ME 10 HRS TO FIND THIS SHITTY DOCUMENTATION
+  componentDidMount() {
+    this.props.updateGanttChart.selectGanttChart(letGanttChart);
+  }
 
   render() {
     arrival = this.state.arrivalText.split(" ").map(Number);
@@ -209,16 +256,22 @@ letGanttChart = []
       processID
     );
 
-    this.calculateWaitingTime(arrival,burst)
-    this.tableDataOutputProcess(arrival,burst,priority,finishTime,turnAroundTime,waitingTime,length, processID)
+    this.calculateWaitingTimeAndGanttChart(arrival, burst, processID);
 
+    this.tableDataOutputProcess(
+      arrival,
+      burst,
+      priority,
+      finishTime,
+      turnAroundTime,
+      waitingTime,
+      length,
+      processID
+    );
 
     return (
-      
       <>
-    
-        <div > 
-
+        <div>
           <Table
             dataSource={this.state.dataSource}
             className="text-center"
@@ -227,16 +280,19 @@ letGanttChart = []
             rowKey="key"
             scroll={{ x: "max-content" }}
           />
-         
         </div>
         <div>
           <Row>
-          <Col xs={12} sm={12} md={12} xl={12} className="text-left">
-          <label>Average Turn Around Time: {tmpsum1} / {length} = {averagetat}</label>
-          </Col >
-          <Col xs={12} sm={12} md={12} xl={12} className="text-right">
-          <label>Average Waiting Time: {tmpsum2} / {length} = {averagewt}</label>
-          </Col>
+            <Col xs={12} sm={12} md={12} xl={12} className="text-left">
+              <label>
+                Average Turn Around Time: {tmpsum1} / {length} = {averagetat}
+              </label>
+            </Col>
+            <Col xs={12} sm={12} md={12} xl={12} className="text-right">
+              <label>
+                Average Waiting Time: {tmpsum2} / {length} = {averagewt}
+              </label>
+            </Col>
           </Row>
         </div>
       </>
@@ -245,5 +301,3 @@ letGanttChart = []
 }
 
 export default PriorityEmpty;
-
-   

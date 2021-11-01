@@ -21,7 +21,6 @@ import {
 Option = Select.Option;
 
 class Home extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -40,7 +39,7 @@ class Home extends Component {
       ganttchart: [],
       // for future component
       texttest: "Parent Text",
-    
+
       selecttexttest: this.selecttexttest,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -51,16 +50,15 @@ class Home extends Component {
   selecttexttest = (texttest) => {
     this.setState({ texttest });
   };
-  selectGanttChart(data)  {
+  selectGanttChart(data) {
     this.setState({ ganttchart: data });
     // console.log("inside")
     // console.log(data)
-  };
+  }
 
-
-//   selectGanttChart = (t) => ({
-//     ganttchart: t
-// });
+  //   selectGanttChart = (t) => ({
+  //     ganttchart: t
+  // });
 
   onChangeValue = (ChangeValue) => {
     this.setState({ selectedCpu: ChangeValue });
@@ -87,23 +85,33 @@ class Home extends Component {
       /^[0-9\s]*$/.test(this.state.burstText) &&
       /^[0-9\s]*$/.test(this.state.priorityText)
     ) {
+      if (
+        this.state.selectedCpu === "Priority (non-preemptive)" ||
+        this.state.selectedCpu === "Priority (preemptive)"
+      ) {
+        let arrival = this.state.arrivalText
+          .trim()
+          .split("  ")
+          .filter((word) => word !== "");
+        let burst = this.state.burstText
+          .trim()
+          .split("  ")
+          .filter((word) => word !== "");
+        // let priority = this.state.priorityText
+        //   .trim()
+        //   .split("  ")
+        //   .filter((word) => word !== "");
 
-      if(this.state.selectedCpu === "Priority (non-preemptive)" ||
-      this.state.selectedCpu === "Priority (preemptive)" ){
-          let arrival = this.state.arrivalText.trim().split('  ').filter(word=>word!=='')
-          let burst = this.state.burstText.trim().split('  ').filter(word=>word!=='')
-          let priority = this.state.priorityText.trim().split('  ').filter(word=>word!=='')
+        arrival = arrival.join(" ");
+        burst = burst.join(" ");
+        // priority = priority.join(" ");
 
-          arrival = arrival.join(' ')
-          burst = burst.join(' ')
-          priority = priority.join(' ')
+        // console.log("length "+ priority.split(' ').length)
 
-          // console.log("length "+ priority.split(' ').length)
-
-          if((arrival.split(' ').length === burst.split(' ').length) && (arrival.split(' ').length === priority.split(' ').length) && (burst.split(' ').length === priority.split(' ').length) ){
-          
-
-            message
+        if (
+          arrival.split(" ").length === burst.split(" ").length 
+        ) {
+          message
             .loading("Calculation in progress..", 1.5)
             .then(() => message.success("Loading finished", 1.5));
           setTimeout(() => {
@@ -115,57 +123,42 @@ class Home extends Component {
               this.setState({ loading: false });
             }, 1000);
           }, 500);
-        }else{
-
+        } else {
           message.error("Data Must Match the other!", 2.5);
+        }
+      } else {
+        let arrival = this.state.arrivalText
+          .trim()
+          .split("  ")
+          .filter((word) => word !== "");
+        let burst = this.state.burstText
+          .trim()
+          .split("  ")
+          .filter((word) => word !== "");
 
+        arrival = arrival.join(" ");
+        burst = burst.join(" ");
 
-        } 
-
-            
-          }else{
-            let arrival = this.state.arrivalText.trim().split('  ').filter(word=>word!=='')
-            let burst = this.state.burstText.trim().split('  ').filter(word=>word!=='')
-        
-  
-            arrival = arrival.join(' ')
-            burst = burst.join(' ')
-  
-     
-  
-            if((arrival.split(' ').length === burst.split(' ').length)  ){
-  
-  
-              message
-              .loading("Calculation in progress..", 2.5)
-              .then(() => message.success("Loading finished", 2.5));
+        if (arrival.split(" ").length === burst.split(" ").length) {
+          message
+            .loading("Calculation in progress..", 2.5)
+            .then(() => message.success("Loading finished", 2.5));
+          setTimeout(() => {
+            this.setState({
+              outputVisible: true,
+            });
+            this.setState({ loading: true });
             setTimeout(() => {
-              this.setState({
-                outputVisible: true,
-              });
-              this.setState({ loading: true });
-              setTimeout(() => {
-                this.setState({ loading: false });
-              }, 2000);
-            }, 500);
-          }else{
-  
-            message.error("Data Must Match the other!", 2.5);
-  
-  
-          } 
-
-          }
-
-
-      }else{
-
-
-        message.error("Must be an Integer!", 2.5);
-
-
+              this.setState({ loading: false });
+            }, 2000);
+          }, 500);
+        } else {
+          message.error("Data Must Match the other!", 2.5);
+        }
       }
-  
+    } else {
+      message.error("Must be an Integer!", 2.5);
+    }
   }
 
   render() {
@@ -234,7 +227,7 @@ class Home extends Component {
                         style={{ width: "100%", marginTop: "8px" }}
                         size="large"
                         className="w-100"
-                        placeholder="2 1 3 4"
+                        placeholder="#1"
                       />
                     </div>
                   ) : //nothing
@@ -264,60 +257,93 @@ class Home extends Component {
                           <div>
                             <GantChart CalculatedData={this.state.ganttchart} />
                             <PriorityEmpty
-                              burstData={this.state.burstText.trim().split('  ').filter(word=>word!=='')}
-                              arrivalData={this.state.arrivalText.trim().split('  ').filter(word=>word!=='')}
-                              priorityData={this.state.priorityText.trim().split('  ').filter(word=>word!=='')}
-                              updateGanttChart={{ganttchart:this.state.ganttchart,selectGanttChart:this.selectGanttChart.bind(this)}}
-
+                              burstData={this.state.burstText
+                                .trim()
+                                .split("  ")
+                                .filter((word) => word !== "")}
+                              arrivalData={this.state.arrivalText
+                                .trim()
+                                .split("  ")
+                                .filter((word) => word !== "")}
+                              priorityData={this.state.priorityText
+                                .trim()
+                                .split("  ")
+                                .filter((word) => word !== "")}
+                              updateGanttChart={{
+                                ganttchart: this.state.ganttchart,
+                                selectGanttChart:
+                                  this.selectGanttChart.bind(this),
+                              }}
                             />
-  
                           </div>
                         ) : this.state.selectedCpu ===
                           "Priority (preemptive)" ? (
                           <div>
-                            <GantChart CalculatedData={this.state.ganttchart}  />
+                            <GantChart CalculatedData={this.state.ganttchart} />
 
                             <PriorityPreempty
-                             burstData={this.state.burstText.trim().split('  ').filter(word=>word!=='')}
-                             arrivalData={this.state.arrivalText.trim().split('  ').filter(word=>word!=='')}
-                             priorityData={this.state.priorityText.trim().split('  ').filter(word=>word!=='')}
-                             updateGanttChart={{ganttchart:this.state.ganttchart,selectGanttChart:this.selectGanttChart.bind(this)}}
-
-
+                              burstData={this.state.burstText
+                                .trim()
+                                .split("  ")
+                                .filter((word) => word !== "")}
+                              arrivalData={this.state.arrivalText
+                                .trim()
+                                .split("  ")
+                                .filter((word) => word !== "")}
+                              priorityData={this.state.priorityText
+                                .trim()
+                                .split("  ")
+                                .filter((word) => word !== "")}
+                              updateGanttChart={{
+                                ganttchart: this.state.ganttchart,
+                                selectGanttChart:
+                                  this.selectGanttChart.bind(this),
+                              }}
                             />
                           </div>
-                      ) : this.state.selectedCpu ===
-                      "Shortest Job First, SJF (non-preemptive)" ? (
-                      <div>
-                        <GantChart CalculatedData={this.state.ganttchart}  />
+                        ) : this.state.selectedCpu ===
+                          "Shortest Job First, SJF (non-preemptive)" ? (
+                          <div>
+                            <GantChart CalculatedData={this.state.ganttchart} />
 
-                        <SJFEmpty
-                          burstData={this.state.burstText.trim().split('  ').filter(word=>word!=='')}
-                          arrivalData={this.state.arrivalText.trim().split('  ').filter(word=>word!=='')}
-                          updateGanttChart={{ganttchart:this.state.ganttchart,selectGanttChart:this.selectGanttChart.bind(this)}}
-                          />
-                      </div>
-                      ) : this.state.selectedCpu ===
-                      "Shortest Remaining Time First, SRTF (preemptive)" ? (
-                      <div>
-                        <GantChart CalculatedData={this.state.ganttchart}  />
+                            <SJFEmpty
+                              burstData={this.state.burstText
+                                .trim()
+                                .split("  ")
+                                .filter((word) => word !== "")}
+                              arrivalData={this.state.arrivalText
+                                .trim()
+                                .split("  ")
+                                .filter((word) => word !== "")}
+                              updateGanttChart={{
+                                ganttchart: this.state.ganttchart,
+                                selectGanttChart:
+                                  this.selectGanttChart.bind(this),
+                              }}
+                            />
+                          </div>
+                        ) : this.state.selectedCpu ===
+                          "Shortest Remaining Time First, SRTF (preemptive)" ? (
+                          <div>
+                            <GantChart CalculatedData={this.state.ganttchart} />
 
-                        <SJFPrempty
-                         burstData={this.state.burstText.trim().split('  ').filter(word=>word!=='')}
-                         arrivalData={this.state.arrivalText.trim().split('  ').filter(word=>word!=='')}
-                         updateGanttChart={{ganttchart:this.state.ganttchart,selectGanttChart:this.selectGanttChart.bind(this)}}
-                         />
-                      </div>
-                       ) : null
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        }
+                            <SJFPrempty
+                              burstData={this.state.burstText
+                                .trim()
+                                .split("  ")
+                                .filter((word) => word !== "")}
+                              arrivalData={this.state.arrivalText
+                                .trim()
+                                .split("  ")
+                                .filter((word) => word !== "")}
+                              updateGanttChart={{
+                                ganttchart: this.state.ganttchart,
+                                selectGanttChart:
+                                  this.selectGanttChart.bind(this),
+                              }}
+                            />
+                          </div>
+                        ) : null}
                       </div>
                     </Skeleton>
                   </div>

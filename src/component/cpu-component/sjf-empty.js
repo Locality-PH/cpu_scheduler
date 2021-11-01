@@ -149,7 +149,8 @@ class SJFEmpty extends Component {
       finalValue = finalValue + tat[i]
     }
 
-    return [finalValue, tat.length, finalValue / tat.length]
+
+    return [finalValue, tat.length, Math.round(((finalValue/tat.length) + Number.EPSILON) * 100) / 100]
   }
 
   calculateWaitingTime = (bt, tat, l) => {
@@ -166,7 +167,7 @@ class SJFEmpty extends Component {
       finalValue = finalValue + wt[i]
     }
 
-    return [finalValue, wt.length, finalValue / wt.length]
+    return [finalValue, wt.length, Math.round(((finalValue/wt.length) + Number.EPSILON) * 100) / 100]
   }
 
   tableDataOutputProcess = (at, bt, ct,tat,wt, l, pid, gc) => {

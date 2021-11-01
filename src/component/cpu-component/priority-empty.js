@@ -8,7 +8,7 @@ let processID = [];
 let waitingTime= [];
 let turnAroundTime = [];
 let finishTime = [];
-let colortag = ["#0085c3","#7ab800","#f2af00", "#dc5034","#ce1126","#0085c3"]
+let colortag = ["#0085c3","#7ab800","#f2af00", "#dc5034","#ce1126","#0085c3", "#7FFF00","#00FFFF" ,"#FF1493", "#FFFAF0" ]
 let letGanttChart = [];
 let sum1=0, sum2=0 , averagetat,averagewt ;
 let tmpsum1, tmpsum2;
@@ -111,7 +111,7 @@ class PriorityEmpty extends Component {
     });
     letGanttChart.push({
       value: bt[i],
-      color: colortag[(i) % 6],
+      color: colortag[(i) % 10],
       description: "P" + (pid[i])
     })
 
@@ -191,28 +191,26 @@ letGanttChart = []
     burst = bt;
     priority = prt;
   };
-
-  componentDidMount() {    this.props.updateGanttChart.selectGanttChart(letGanttChart)  }
+       // MVP THIS IS THE MOST FUCKING IMPORTANT CODE FOR THE GANTT CHART TOOK ME 10 HRS TO FIND THIS SHITTY DOCUMENTATION
+  componentDidMount() {   
+     this.props.updateGanttChart.selectGanttChart(letGanttChart)  
+    }
 
   render() {
-
-
     arrival = this.state.arrivalText.split(" ").map(Number);
     burst = this.state.burstText.split(" ").map(Number);
     priority = this.state.priorityText.split(" ").map(Number);
     length = this.state.arrivalText.split(" ").length;
-
     this.calculateProcessId(length);
-
     this.sortAccordingArrivalTimeAndPriority(
       arrival,
       burst,
       priority,
       processID
     );
+
     this.calculateWaitingTime(arrival,burst)
     this.tableDataOutputProcess(arrival,burst,priority,finishTime,turnAroundTime,waitingTime,length, processID)
-      // console.log(letGanttChart)
 
 
     return (

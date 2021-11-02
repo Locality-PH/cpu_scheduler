@@ -1,8 +1,19 @@
 import React, { Component } from "react";
 import { Table, Row, Col } from "antd";
-import { BsSquareFill, BsTypeH1 } from 'react-icons/bs';
+import { BsSquareFill } from 'react-icons/bs';
 
-let colortag = ["#145369", "#0085c3", "#7ab800", "#f2af00", "#dc5034", "#ce1126", "#116530", "#6e2585", "#be4d25"]
+let colortag = [
+  "#0085c3",
+  "#7ab800",
+  "#f2af00",
+  "#dc5034",
+  "#ce1126",
+  "#0085c3",
+  "#7FFF00",
+  "#00FFFF",
+  "#FF1493",
+  "#FFFAF0",
+];
 
 let arrivalTime = [];
 let burstTime = [];
@@ -113,15 +124,15 @@ class SJFPreempty extends Component {
       console.log("Pushing gantt chart, PID: " + prevPID)
       letGanttChart.push({
         value: duration,
-        color: colortag[(prevPID) % 9],
-        description: prevRuntime + ''
+        color: colortag[(prevPID) % 10],
+        description: "P" + processID[prevPID]
       })
     }
     else {
       letGanttChart.push({
         value: runtime,
-        color: "black",
-        description: prevRuntime + ''
+        color: "grey",
+        description: "-"
       })
     }
 
@@ -155,15 +166,12 @@ class SJFPreempty extends Component {
     });
 
     //Average of waiting and turnaround time
-    averagetat = Math.round(((sumwt / totalLength) + Number.EPSILON) * 100) / 100;
-    averagewt = Math.round(((sumtat / totalLength) + Number.EPSILON) * 100) / 100;
+    averagetat = Math.round(((sumtat / totalLength) + Number.EPSILON) * 100) / 100;
+    averagewt = Math.round(((sumwt / totalLength) + Number.EPSILON) * 100) / 100;
   }
 
-
-  componentDidMount() { this.props.updateGanttChart.selectGanttChart(letGanttChart) }
-
-  render() {
-    //Initialize
+  startSJF = () => {
+     //Initialize
     arrivalTime = this.state.arrivalText.split(" ").map(Number);
     originalBurstTime = this.state.burstText.split(" ").map(Number);
     burstTime = this.state.burstText.split(" ").map(Number);
@@ -234,12 +242,19 @@ class SJFPreempty extends Component {
     }
 
     this.pushData();
+  }
+
+  componentDidMount() { this.props.updateGanttChart.selectGanttChart(letGanttChart) }
+
+  render() {
+   
+  this.startSJF();
 
     return (
       <>
         <div >
 
-          <Row align="middle" justify="center">
+          {/* <Row align="middle" justify="center">
             {numbers.map((PID) =>
               <Col style={{ margin: "0px 8px" }}>
                 P{PID} <BsSquareFill style={{ color: colortag[(PID - 1) % 9], margin: "-2px 0px" }} />
@@ -247,9 +262,9 @@ class SJFPreempty extends Component {
             )}
 
             <Col style={{ margin: "0px 8px" }}>
-              Idle CPU <BsSquareFill style={{ color: "black", margin: "-2px 0px" }} />
+              Idle CPU <BsSquareFill style={{ color: "grey", margin: "-2px 0px" }} />
             </Col>
-          </Row>
+          </Row> */}
 
           <Table
             dataSource={this.state.dataSource}

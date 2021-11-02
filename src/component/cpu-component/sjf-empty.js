@@ -249,41 +249,35 @@ class SJFEmpty extends Component {
   }
 
   arrangeTableValue = (si, gc, at ,bt, finishTime, turnAroundTime, waitingTime, l) => {
-    let val = []
-    val = si
-    
-    for(var i = 0; i < l; i++){
-      val[i][1] = at[i]
-      val[i][2] = bt[i]
-      val[i][3] = finishTime[i]
-      val[i][4] = turnAroundTime[i]
-      val[i][5] = waitingTime[i]
-    }
-
-    val.sort(function(a, b) {
-      return a[1] - b[1];
-    });
-
-    let newProcessID = []
+    let newPID = []
     let newAt = []
     let newBt = []
     let newFinishTime = []
     let newTurnAroundTime = []
     let newWaitingTime = []
 
-    for(var j = 0; j < l; j++){
-      newProcessID.push(gc[j][2][0])
-      newAt.push(val[j][1])
-      newBt.push(val[j][2])
-      newFinishTime.push(val[j][3])
-      newTurnAroundTime.push(val[j][4])
-      newWaitingTime.push(val[j][5])
+    si.sort(function(a, b) {
+      return a[1] - b[1];
+    })
+
+    for(var q = 0; q < gc.length; q++){
+      if(gc[q][2][0] != "-"){
+        newPID.push(gc[q][2][0])
+      }
+    }
+
+    for(var i = 0; i < l; i++){
+      newAt.push(si[i][1])
+      newBt.push(si[i][2])
+      newFinishTime.push(finishTime[si[i][0]])
+      newTurnAroundTime.push(turnAroundTime[si[i][0]])
+      newWaitingTime.push(waitingTime[si[i][0]])
     }
 
     arrival = newAt
     burst = newBt
-    
-    return[newFinishTime, newTurnAroundTime, newWaitingTime, newProcessID]
+
+    return [newPID, newFinishTime, newTurnAroundTime, newWaitingTime]
   }
 
   tableDataOutputProcess = (at, bt, ct,tat,wt, l, pid, gc) => {
@@ -346,12 +340,13 @@ class SJFEmpty extends Component {
     averagewt = this.waitingTimeAverage(waitingTime);
     averagetat = this.turnAroundTimeAverage(turnAroundTime);
 
-    // // Just sorting the final value
-    // arrangeTableVal = this.arrangeTableValue(sortIndex, ganttChart, arrival, burst, finishTime, turnAroundTime, waitingTime, length)
-    // finishTime = arrangeTableVal[0]
-    // turnAroundTime = arrangeTableVal[1]
-    // waitingTime = arrangeTableVal[2]
-    // processID = arrangeTableVal[3]
+    // Just sorting the final value
+    arrangeTableVal = this.arrangeTableValue(sortIndex, ganttChart, arrival, burst, finishTime, turnAroundTime, waitingTime, length)
+    processID = arrangeTableVal[0]
+    finishTime = arrangeTableVal[1]
+    turnAroundTime = arrangeTableVal[2]
+    waitingTime = arrangeTableVal[3]
+   
 
     this.tableDataOutputProcess(arrival,burst ,finishTime,turnAroundTime,waitingTime,length, processID, ganttChart)
 

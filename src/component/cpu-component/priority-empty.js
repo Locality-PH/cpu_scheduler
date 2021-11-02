@@ -86,7 +86,7 @@ class PriorityEmpty extends Component {
     let n = true;
     let count, empty, blank;
 
-    // PROCESS 1
+    // ANY FIRST PROCESS FROM THE STACK
     finishTime[0] = at[0] + bt[0];
     turnAroundTime[0] = finishTime[0] - at[0];
     waitingTime[0] = turnAroundTime[0] - bt[0];
@@ -97,21 +97,15 @@ class PriorityEmpty extends Component {
       color: colortag[0 % 10],
       description: "P" + processID[0],
     });
-    // for (var i = 1; i < length; i++) {
-    //   // finishTime[i] = bt[i] + finishTime[i - 1];
-    //   // turnAroundTime[i] = Math.abs(finishTime[i] - at[i]) // > 0 ? finishTime[i] - at[i] : 0;
-    //   // waitingTime[i] = Math.abs(turnAroundTime[i] - bt[i]) // > 0 ? turnAroundTime[i] - bt[i] : 0;
-    //   console.log("finishtime:" + finishTime[i]+ "finishtime -1:" +finishTime[i-1]);
-
-    // }
+    // LOOP  PROCESS STARTING FROM THE SECOND STACK TO LAST
     for (var i = 1; i < length; i++) {
+
+      // NUMBER OF BURST
       empty = bt[i];
       while (n) {
         count += 1;
         blank += 1;
-        console.log(
-          "count: " + count + " arrival: " + at[i] + " burst: " + bt[i]
-        );
+        // PUSH BLANK TIME TO GANTTCHART
         if (at[i] == count) {
           letGanttChart.push({
             value: blank,
@@ -119,15 +113,16 @@ class PriorityEmpty extends Component {
             description: "-",
           });
         }
+        //ARRIVAL TIME DISTANCE FROM THE OTHER PROCESS
         if (at[i] < count) {
           empty -= 1;
+          //PROCESS END PUSH TO GANTCHART
           if (empty == 0) {
             n = false;
             blank = 0;
             finishTime[i] = count;
-            turnAroundTime[i] = Math.abs(finishTime[i] - at[i]); // > 0 ? finishTime[i] - at[i] : 0;
-            waitingTime[i] = Math.abs(turnAroundTime[i] - bt[i]); // > 0 ? turnAroundTime[i] - bt[i] : 0;
-            console.log("counting " + count);
+            turnAroundTime[i] = Math.abs(finishTime[i] - at[i]); 
+            waitingTime[i] = Math.abs(turnAroundTime[i] - bt[i]); 
             letGanttChart.push({
               value: bt[i],
               color: colortag[i % 10],
@@ -138,21 +133,89 @@ class PriorityEmpty extends Component {
       }
       n = true;
     }
+    //RESET
     count = 0;
     empty = 0;
     for (var i = 0; i < length; i++) {
       sum1 += turnAroundTime[i];
       sum2 += waitingTime[i];
     }
+    // TRANFER DATA TO RENDER
     tmpsum1 = sum1;
     tmpsum2 = sum2;
-    console.log("sum1" + sum1);
     averagetat = Math.round((sum1 / length + Number.EPSILON) * 100) / 100;
     averagewt = Math.round((sum2 / length + Number.EPSILON) * 100) / 100;
   };
 
+
+
+
+  
+  sortAccordingArrivalTimeAndPriority = (at, bt, prt, pid) => {
+    let temp;
+    let stemp;
+    for (var i = 0; i < length; i++) {
+      for (var j = 0; j < length - i - 1; j++) {
+        if (at[j] > at[j + 1]) {
+          //SWAPPING ARRIVAL TIME
+          temp = at[j];
+          at[j] = at[j + 1];
+          at[j + 1] = temp;
+
+          //SWAPPING BURST TIME
+          temp = bt[j];
+          bt[j] = bt[j + 1];
+          bt[j + 1] = temp;
+
+          //SWAPPING PRIORITY
+          temp = prt[j];
+          prt[j] = prt[j + 1];
+          prt[j + 1] = temp;
+
+         //SWAPPING PROCESS ID
+          stemp = pid[j];
+          pid[j] = pid[j + 1];
+          pid[j + 1] = stemp;
+        }
+        //SORITING ACCORDING TO PRIORITY WHEN ARRIVAL TIME ARE THE SAME
+        if (at[j] === at[j + 1]) {
+          if (prt[j] > prt[j + 1]) {
+            //SWAPPING ARRIVAL TIME
+            temp = at[j];
+            at[j] = at[j + 1];
+            at[j + 1] = temp;
+
+            //SWAPPING BURST TIME
+            temp = bt[j];
+            bt[j] = bt[j + 1];
+            bt[j + 1] = temp;
+
+            //SWAPPING PRIORITY
+            temp = prt[j];
+            prt[j] = prt[j + 1];
+            prt[j + 1] = temp;
+
+            //SWAPPING PROCESS ID
+            stemp = pid[j];
+            pid[j] = pid[j + 1];
+            pid[j + 1] = stemp;
+          }
+        }
+      }
+    }
+    return (
+      arrival = at,
+      burst = bt,
+      priority = prt
+
+    )
+  
+  };
+
   tableDataOutputProcess = (at, bt, prt, ct, tat, wt, l, pid) => {
+
     let n = 0;
+    //PUSH DATA FROM THE TABLE
     for (var i = 0; i < l; i++) {
       this.state.dataSource.push({
         key: (n += 1),
@@ -165,7 +228,7 @@ class PriorityEmpty extends Component {
         wt: wt[i],
       });
     }
-
+    // CLEAR DATASET
     letGanttChart = [];
     processID = [];
     waitingTime = [];
@@ -179,96 +242,46 @@ class PriorityEmpty extends Component {
     waitingTime = [];
     sum1 = 0;
     sum2 = 0;
+    return null
   };
 
-  sortAccordingArrivalTimeAndPriority = (at, bt, prt, pid) => {
-    let temp;
-    let stemp;
-    for (var i = 0; i < length; i++) {
-      for (var j = 0; j < length - i - 1; j++) {
-        if (at[j] > at[j + 1]) {
-          //swapping arrival time
-          temp = at[j];
-          at[j] = at[j + 1];
-          at[j + 1] = temp;
-
-          //swapping burst time
-          temp = bt[j];
-          bt[j] = bt[j + 1];
-          bt[j + 1] = temp;
-
-          //swapping priority
-          temp = prt[j];
-          prt[j] = prt[j + 1];
-          prt[j + 1] = temp;
-
-          //swapping process identity
-          stemp = pid[j];
-          pid[j] = pid[j + 1];
-          pid[j + 1] = stemp;
-        }
-        //sorting according to priority when arrival timings are same
-        if (at[j] === at[j + 1]) {
-          if (prt[j] > prt[j + 1]) {
-            //swapping arrival time
-            temp = at[j];
-            at[j] = at[j + 1];
-            at[j + 1] = temp;
-
-            //swapping burst time
-            temp = bt[j];
-            bt[j] = bt[j + 1];
-            bt[j + 1] = temp;
-
-            //swapping priority
-            temp = prt[j];
-            prt[j] = prt[j + 1];
-            prt[j + 1] = temp;
-
-            //swapping process identity
-            stemp = pid[j];
-            pid[j] = pid[j + 1];
-            pid[j + 1] = stemp;
-          }
-        }
-      }
-    }
-
-    arrival = at;
-    burst = bt;
-    priority = prt;
-  };
+  renderComputedPriority(){
+    //INITIALIZING
+      arrival = this.state.arrivalText.split(" ").map(Number);
+      burst = this.state.burstText.split(" ").map(Number);
+      priority = this.state.priorityText.split(" ").map(Number);
+      length = this.state.arrivalText.split(" ").length;
+      //METHODS COMPUTATION
+      this.calculateProcessId(length);
+      this.sortAccordingArrivalTimeAndPriority(
+        arrival,
+        burst,
+        priority,
+        processID
+      );
+      this.calculateWaitingTimeAndGanttChart(arrival, burst, processID);
+      this.tableDataOutputProcess(
+        arrival,
+        burst,
+        priority,
+        finishTime,
+        turnAroundTime,
+        waitingTime,
+        length,
+        processID
+      );
+  
+   
+  }
+  
   // MVP THIS IS THE MOST FUCKING IMPORTANT CODE FOR THE GANTT CHART TOOK ME 10 HRS TO FIND THIS SHITTY DOCUMENTATION
   componentDidMount() {
     this.props.updateGanttChart.selectGanttChart(letGanttChart);
   }
 
   render() {
-    arrival = this.state.arrivalText.split(" ").map(Number);
-    burst = this.state.burstText.split(" ").map(Number);
-    priority = this.state.priorityText.split(" ").map(Number);
-    length = this.state.arrivalText.split(" ").length;
-    this.calculateProcessId(length);
-    this.sortAccordingArrivalTimeAndPriority(
-      arrival,
-      burst,
-      priority,
-      processID
-    );
-
-    this.calculateWaitingTimeAndGanttChart(arrival, burst, processID);
-
-    this.tableDataOutputProcess(
-      arrival,
-      burst,
-      priority,
-      finishTime,
-      turnAroundTime,
-      waitingTime,
-      length,
-      processID
-    );
-
+    //RENDER
+  this.renderComputedPriority()
     return (
       <>
         <div>

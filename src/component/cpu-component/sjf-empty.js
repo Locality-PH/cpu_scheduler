@@ -93,45 +93,109 @@ class SJFEmpty extends Component {
 
   sortAccordingArrivalTimeAndBurstTime = (at, bt, l) => {
     let finalValue = []
+    let validatedValue = []
     let startingIndex = at.indexOf(Math.min(...at))
 
+    validatedValue.push([startingIndex, 0, 0])
     finalValue.push([startingIndex, 0, 0])
 
     for(var i = 0; i < l; i++){
       if(i != startingIndex){
-        finalValue.push([i, at[i], bt[i]])
+        validatedValue.push([i, at[i], bt[i]])
       }
     }
 
-    finalValue.sort(function(a, b) {
+    validatedValue.sort(function(a, b) {
       return a[2] - b[2];
     });
 
+    validatedValue[0] = [startingIndex, at[startingIndex], bt[startingIndex]]
     finalValue[0] = [startingIndex, at[startingIndex], bt[startingIndex]]
-    // console.log(finalValue)
+
+    let ct = 0
+    let remainingArr = []
+    ct = ct + validatedValue[0][2]
+
+    for(var j = 1; j < l; j++){
+      if(ct > validatedValue[j][1] && ct > validatedValue[j][2]){
+        ct = ct + validatedValue[j][2]
+        finalValue.push(validatedValue[j])
+      }
+      else{
+        remainingArr.push(validatedValue[j])
+      }
+    }
+
+    remainingArr.sort(function(a, b) {
+      return a[1] - b[1];
+    });
+
+    if(remainingArr.length != 0){
+      finalValue = [...finalValue, ...remainingArr]
+      // console.log("concat")
+    }
+
+    // console.log("Reremaining arr ", remainingArr)
+    // console.log("FInal Value ", finalValue)
     return finalValue;
 
   }
 
   calculateGanttChart = (indexList, bt, l, pid) => {
     let finalValue = []
-    let ct = 0
+    let ct = indexList[0][1]
 
-    for(var i = 0; i < l; i++){
+    ct = ct + indexList[0][2]
+    finalValue.push([ct, bt[indexList[0][0]], pid[indexList[0][0]]])
+
+    for(var i = 1; i < l; i++){
+      if(ct > indexList[i][1]){
         ct = ct + indexList[i][2]
         finalValue.push([ct, bt[indexList[i][0]], pid[indexList[i][0]]])
+      }
+      else if(ct < indexList[i][1]){
+        let isWaiting = true
+        if(isWaiting == true){
+          ct = Math.abs(ct - [indexList[i][1]])
+          finalValue.push([ct, bt[indexList[i][0]], "-"])
+          isWaiting = true      
+        }
+        ct = indexList[i][1] + indexList[i][2]
+        finalValue.push([ct, bt[indexList[i][0]], pid[indexList[i][0]]])      
+      }
     }
 
     return finalValue
   }
 
+  // calculateGanttChart = (indexList, bt, l, pid) => {
+  //   let finalValue = []
+  //   let ct = 0
+
+  //   for(var i = 0; i < l; i++){
+  //       ct = ct + indexList[i][2]
+  //       finalValue.push([ct, bt[indexList[i][0]], pid[indexList[i][0]]])
+  //   }
+
+  //   return finalValue
+  // }
+
   calculateFinishTime(indexList, l, at){
     let finalValue = []
-    let ct = at[indexList[0][0]]
+    let ct = indexList[0][1]
 
-    for(var i = 0; i < l; i++){
-      ct = ct + indexList[i][2]
-      finalValue[indexList[i][0]] = ct
+    ct = ct + indexList[0][2]
+    finalValue[indexList[0][0]] = ct
+
+    for(var i = 1; i < l; i++){
+      if(ct > indexList[i][1]){
+        ct = ct + indexList[i][2]
+        finalValue[indexList[i][0]] = ct
+      }
+      else if(ct < indexList[i][1]){
+        ct = indexList[i][1] + indexList[i][2]
+        finalValue[indexList[i][0]] = ct
+      }
   }
     return finalValue
   }
@@ -220,10 +284,20 @@ class SJFEmpty extends Component {
         tat: tat[i],
         wt: wt[i],
       });
+      
+    }
+
+    for (var i = 0; i < gc.length; i++) {
+      let gcColor = colortag[(i) % 6]
+      let p = "P" + gc[i][2][0]
+      if(gc[i][2][0] == "-"){
+        gcColor = "#000000"
+        p = "-"
+      }
       letGanttChart.push({
         value: gc[i][1],
-        color: colortag[(i) % 6],
-        description: "P" + (gc[i][2][0])
+        color: gcColor,
+        description: p
       })
       
     }

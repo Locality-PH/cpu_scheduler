@@ -115,7 +115,6 @@ class PriorityEmpty extends Component {
       description: "P" + (pid[i])
     })
 
-    
   }
 
 letGanttChart = []
@@ -192,11 +191,9 @@ letGanttChart = []
     priority = prt;
   };
 
-  componentDidMount() {    this.props.updateGanttChart.selectGanttChart(letGanttChart)  }
+  componentDidMount() {this.props.updateGanttChart.selectGanttChart(letGanttChart)}
 
   render() {
-
-
     arrival = this.state.arrivalText.split(" ").map(Number);
     burst = this.state.burstText.split(" ").map(Number);
     priority = this.state.priorityText.split(" ").map(Number);
@@ -210,9 +207,10 @@ letGanttChart = []
       priority,
       processID
     );
+    
     this.calculateWaitingTime(arrival,burst)
     this.tableDataOutputProcess(arrival,burst,priority,finishTime,turnAroundTime,waitingTime,length, processID)
-      // console.log(letGanttChart)
+    // console.log(letGanttChart)
 
 
     return (

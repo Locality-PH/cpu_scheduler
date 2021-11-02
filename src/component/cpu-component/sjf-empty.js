@@ -95,6 +95,20 @@ class SJFEmpty extends Component {
     let finalValue = []
     let validatedValue = []
     let startingIndex = at.indexOf(Math.min(...at))
+    
+    let lowestArr = []
+
+    for(var f = 0; f < l; f++){
+      if(at[startingIndex] == at[f] && f != startingIndex - 1){
+        lowestArr.push([f, at[f], bt[f]])
+      }
+    }
+
+    lowestArr.sort(function(a, b) {
+      return a[2] - b[2];
+    });
+
+    startingIndex = lowestArr[0][0]
 
     validatedValue.push([startingIndex, 0, 0])
     finalValue.push([startingIndex, 0, 0])
@@ -117,7 +131,7 @@ class SJFEmpty extends Component {
     ct = ct + validatedValue[0][2]
 
     for(var j = 1; j < l; j++){
-      if(ct > validatedValue[j][1] && ct > validatedValue[j][2]){
+      if(ct >= validatedValue[j][1] && ct >= validatedValue[j][2]){
         ct = ct + validatedValue[j][2]
         finalValue.push(validatedValue[j])
       }
@@ -149,11 +163,11 @@ class SJFEmpty extends Component {
     finalValue.push([ct, bt[indexList[0][0]], pid[indexList[0][0]]])
 
     for(var i = 1; i < l; i++){
-      if(ct > indexList[i][1]){
+      if(ct >= indexList[i][1]){
         ct = ct + indexList[i][2]
         finalValue.push([ct, bt[indexList[i][0]], pid[indexList[i][0]]])
       }
-      else if(ct < indexList[i][1]){
+      else if(ct <= indexList[i][1]){
         let isWaiting = true
         if(isWaiting == true){
           ct = Math.abs(ct - [indexList[i][1]])
@@ -188,11 +202,11 @@ class SJFEmpty extends Component {
     finalValue[indexList[0][0]] = ct
 
     for(var i = 1; i < l; i++){
-      if(ct > indexList[i][1]){
+      if(ct >= indexList[i][1]){
         ct = ct + indexList[i][2]
         finalValue[indexList[i][0]] = ct
       }
-      else if(ct < indexList[i][1]){
+      else if(ct <= indexList[i][1]){
         ct = indexList[i][1] + indexList[i][2]
         finalValue[indexList[i][0]] = ct
       }

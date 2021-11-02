@@ -84,7 +84,7 @@ class PriorityEmpty extends Component {
 
   calculateWaitingTimeAndGanttChart = (at, bt, pid) => {
     let n = true;
-    let count, empty, blank;
+    let count, empty, blank = 0;
 
     // ANY FIRST PROCESS FROM THE STACK
     finishTime[0] = at[0] + bt[0];
@@ -109,7 +109,7 @@ class PriorityEmpty extends Component {
         if (at[i] == count) {
           letGanttChart.push({
             value: blank,
-            color: "#000000",
+            color: "gray",
             description: "-",
           });
         }
@@ -270,7 +270,7 @@ class PriorityEmpty extends Component {
         length,
         processID
       );
-  
+  console.log("RENDER")
    
   }
   

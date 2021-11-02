@@ -91,6 +91,7 @@ class SJFEmpty extends Component {
     }
   };
 
+  // Sort the Input Value according in Arrival and Burst time
   sortAccordingArrivalTimeAndBurstTime = (at, bt, l) => {
     let finalValue = []
     let validatedValue = []
@@ -155,6 +156,7 @@ class SJFEmpty extends Component {
 
   }
 
+  // GanttChart Calculation
   calculateGanttChart = (indexList, bt, l, pid) => {
     let finalValue = []
     let ct = indexList[0][1]
@@ -194,6 +196,7 @@ class SJFEmpty extends Component {
   //   return finalValue
   // }
 
+  // Finish time calculation
   calculateFinishTime(indexList, l, at){
     let finalValue = []
     let ct = indexList[0][1]
@@ -214,6 +217,7 @@ class SJFEmpty extends Component {
     return finalValue
   }
 
+  // Turn around time calculation
   calculateTurnAroundTime = (at, ct, l) => {
     var finalValue = []
     for(var i = 0; i < l; i++){
@@ -222,6 +226,7 @@ class SJFEmpty extends Component {
     return finalValue
   }
   
+  // Turn around time average calculation
   turnAroundTimeAverage(tat){
     let finalValue = 0
     for(var i = 0; i < tat.length; i++){
@@ -231,6 +236,7 @@ class SJFEmpty extends Component {
     return [finalValue, tat.length, Math.round(((finalValue/tat.length) + Number.EPSILON) * 100) / 100]
   }
 
+  // Waiting time calculation
   calculateWaitingTime = (bt, tat, l) => {
     var finalValue = []
     for(var i = 0; i < l; i++){
@@ -239,6 +245,7 @@ class SJFEmpty extends Component {
     return finalValue
   }
 
+  // Waiting time average calculation
   waitingTimeAverage(wt){
     let finalValue = 0
     for(var i = 0; i < wt.length; i++){
@@ -248,6 +255,7 @@ class SJFEmpty extends Component {
     return [finalValue, wt.length, Math.round(((finalValue/wt.length) + Number.EPSILON) * 100) / 100]
   }
 
+  // Sorting the final value
   arrangeTableValue = (si, gc, at ,bt, finishTime, turnAroundTime, waitingTime, l) => {
     let newPID = []
     let newAt = []
@@ -280,6 +288,7 @@ class SJFEmpty extends Component {
     return [newPID, newFinishTime, newTurnAroundTime, newWaitingTime]
   }
 
+  // Output table
   tableDataOutputProcess = (at, bt, ct,tat,wt, l, pid, gc) => {
     let n = 0;
     for (var i = 0; i < l; i++) {

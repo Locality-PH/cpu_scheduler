@@ -26,10 +26,7 @@ let finishTime = [];
 let letGanttChart = [];
 let sumtat = 0, sumwt = 0, averagetat, averagewt;
 
-let numbers = [];
-const listItems = numbers.map((number) =>
-  <li>{number}</li>
-);
+let tempPID = [];
 
 
 class SJFPreempty extends Component {
@@ -99,7 +96,7 @@ class SJFPreempty extends Component {
       });
     }
 
-    numbers = processID;
+    tempPID = processID;
 
     //Clear Data
     letGanttChart = []
@@ -120,19 +117,28 @@ class SJFPreempty extends Component {
     let duration = runtime - prevRuntime;
 
     //prevPID is undefined if there is no process loaded
-    if (prevPID !== undefined && prevPID >= -1 && prevPID !== null ) {
+    if (prevPID !== undefined && prevPID >= -1 && prevPID !== null) {
       console.log("Pushing gantt chart, PID: " + prevPID)
       letGanttChart.push({
         value: duration,
         color: colortag[(prevPID) % 10],
-        description: "P" + processID[prevPID]
+        name: "P" + processID[prevPID],
+        description: 
+          "\nStart: " + prevRuntime + "\n" +
+          "Duration: " + duration + "\n" +
+          "End: " + runtime,
+
       })
     }
     else {
       letGanttChart.push({
         value: runtime,
         color: "grey",
-        description: "-"
+        name: "-",
+        description: 
+          "\nStart: " + prevRuntime + "\n" +
+          "Duration: " + duration + "\n" +
+          "End: " + runtime,
       })
     }
 
@@ -171,7 +177,7 @@ class SJFPreempty extends Component {
   }
 
   startSJF = () => {
-     //Initialize
+    //Initialize
     arrivalTime = this.state.arrivalText.split(" ").map(Number);
     originalBurstTime = this.state.burstText.split(" ").map(Number);
     burstTime = this.state.burstText.split(" ").map(Number);
@@ -247,23 +253,24 @@ class SJFPreempty extends Component {
   componentDidMount() { this.props.updateGanttChart.selectGanttChart(letGanttChart) }
 
   render() {
-   
-  this.startSJF();
+
+    this.startSJF();
 
     return (
       <>
         <div >
 
-          {/* <Row align="middle" justify="center">
-            {numbers.map((PID) =>
+          <Row align="middle" justify="center">
+            {tempPID.map((PID) =>
               <Col style={{ margin: "0px 8px" }}>
                 P{PID} <BsSquareFill style={{ color: colortag[(PID - 1) % 9], margin: "-2px 0px" }} />
               </Col>
             )}
+
             <Col style={{ margin: "0px 8px" }}>
               Idle CPU <BsSquareFill style={{ color: "grey", margin: "-2px 0px" }} />
             </Col>
-          </Row> */}
+          </Row>
 
           <Table
             dataSource={this.state.dataSource}

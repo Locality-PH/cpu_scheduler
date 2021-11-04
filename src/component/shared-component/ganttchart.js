@@ -1,6 +1,44 @@
 import React, { Component } from "react";
 import HSBar from "react-horizontal-stacked-bar-chart";
 class GanttChart extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+     
+      columns: [
+        {
+          title: () => <div className="text-center">Job</div>,
+          key: "job",
+          render: (_, cpu) => <div className="text-center">{cpu.job}</div>,
+        },
+        {
+          title: () => <div className="text-center">Arrival Time</div>,
+          key: "arrival",
+          render: (_, cpu) => <div className="text-center">{cpu.arrival}</div>,
+        },
+        {
+          title: () => <div className="text-center">Burst Time</div>,
+          key: "burst",
+          render: (_, cpu) => <div className="text-center">{cpu.burst}</div>,
+        },
+        {
+          title: () => <div className="text-center">Finished Time</div>,
+          key: "ct",
+          render: (_, cpu) => <div className="text-center">{cpu.ct}</div>,
+        },
+        {
+          title: () => <div className="text-center">Turnaround Time</div>,
+          key: "tat",
+          render: (_, cpu) => <div className="text-center">{cpu.tat}</div>,
+        },
+        {
+          title: () => <div className="text-center">Waiting Time</div>,
+          key: "wt",
+          render: (_, cpu) => <div className="text-center">{cpu.wt}</div>,
+        },
+      ],
+    };
+  }
   render() {
     return (
       <>
@@ -20,6 +58,7 @@ class GanttChart extends Component {
           data={this.props.CalculatedData}
           height={40}
           showTextIn
+          showTextWithValue={false}
           outlineWidth={0}
           outlineColor="black"
         />

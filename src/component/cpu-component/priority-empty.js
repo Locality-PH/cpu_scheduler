@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Table, Row, Col } from "antd";
+import { BsSquareFill } from 'react-icons/bs';
+//TEMPORARY DYNAMIC DATASET 
 let arrival;
 let burst;
 let priority;
@@ -26,8 +28,16 @@ let sum1 = 0,
   averagetat,
   averagewt;
 let tmpsum1, tmpsum2;
+let test=-1;
+
+let numbers = [];
+const listItems = numbers.map((number) =>
+  <li>{number}</li>
+);
+
 
 class PriorityEmpty extends Component {
+  //PASS DATA FROM PARENT COMPONENT TO CHILD COMPONENT
   constructor(props) {
     super(props);
     this.state = {
@@ -74,9 +84,10 @@ class PriorityEmpty extends Component {
       ],
     };
   }
-
+  
   calculateProcessId = (l) => {
     let pid = 0;
+    // TURN LENGTH OF PROCESS TO ARRAY
     for (var i = 0; i < l; i++) {
       processID.push([(pid += 1)]);
     }
@@ -84,7 +95,7 @@ class PriorityEmpty extends Component {
 
   calculateWaitingTimeAndGanttChart = (at, bt, pid) => {
     let n = true;
-    let count, empty, blank = 0;
+    let count, empty, blank = 0 , blankstart = 0;
 
     // ANY FIRST PROCESS FROM THE STACK
     finishTime[0] = at[0] + bt[0];
@@ -95,13 +106,17 @@ class PriorityEmpty extends Component {
     letGanttChart.push({
       value: bt[0],
       color: colortag[0 % 10],
-      description: "P" + processID[0],
+      description: "\nStart: " + at[0] +"\n"+
+                    "Duration: " + bt[0] + "\n"+
+                    "End: "+ count,
+      name: "P" + processID[0]
     });
     // LOOP  PROCESS STARTING FROM THE SECOND STACK TO LAST
     for (var i = 1; i < length; i++) {
-
-      // NUMBER OF BURST
+      
+      // NUMBER OF BURST AND INTERVAL OF ARRIVAL TIME
       empty = bt[i];
+      blankstart = count;
       while (n) {
         count += 1;
         blank += 1;
@@ -110,12 +125,18 @@ class PriorityEmpty extends Component {
           letGanttChart.push({
             value: blank,
             color: "gray",
-            description: "-",
+            name: "-",
+            description: "\nStart: " + blankstart+"\n"+
+                         "Duration: " + blank + "\n"+
+                         "End: "+ count,
+
           });
+       
         }
         //ARRIVAL TIME DISTANCE FROM THE OTHER PROCESS
         if (at[i] < count) {
           empty -= 1;
+          
           //PROCESS END PUSH TO GANTCHART
           if (empty == 0) {
             n = false;
@@ -126,7 +147,10 @@ class PriorityEmpty extends Component {
             letGanttChart.push({
               value: bt[i],
               color: colortag[i % 10],
-              description: "P" + pid[i],
+              description: "\nStart: " + at[i] +"\n"+
+                           "Duration: " + bt[i] + "\n"+
+                           "End: "+ count,
+              name: "P" + processID[i]
             });
           }
         }
@@ -207,7 +231,6 @@ class PriorityEmpty extends Component {
       arrival = at,
       burst = bt,
       priority = prt
-
     )
   
   };
@@ -228,6 +251,8 @@ class PriorityEmpty extends Component {
         wt: wt[i],
       });
     }
+    numbers = pid;
+    test = -1;
     // CLEAR DATASET
     letGanttChart = [];
     processID = [];
@@ -274,7 +299,7 @@ class PriorityEmpty extends Component {
    
   }
   
-  // MVP THIS IS THE MOST FUCKING IMPORTANT CODE FOR THE GANTT CHART TOOK ME 10 HRS TO FIND THIS SHITTY DOCUMENTATION
+  // RENDER THE DATA TO GANTTCHART AFTER RENDERING TABLE
   componentDidMount() {
     this.props.updateGanttChart.selectGanttChart(letGanttChart);
   }
@@ -284,6 +309,18 @@ class PriorityEmpty extends Component {
   this.renderComputedPriority()
     return (
       <>
+               <Row align="middle" justify="center">
+            {numbers.map((processID) =>
+              <Col style={{ margin: "0px 8px" }}>
+                P{processID} <BsSquareFill style={{ color: colortag[(test+=1) % 10], margin: "-2px 0px" }} />
+        
+               
+              </Col>
+            )}
+            <Col style={{ margin: "0px 8px" }}>
+              Idle CPU <BsSquareFill style={{ color: "grey", margin: "-2px 0px" }} />
+            </Col>
+          </Row>
         <div>
           <Table
             dataSource={this.state.dataSource}

@@ -6,9 +6,9 @@ import 'antd/dist/antd.css';
 import './css/custom.css';
 
 ReactDOM.render(
- <BrowserRouter>
+  <BrowserRouter>
     <Switch>
-   
+
       <Route path="/cpu" render={(props) => <Admin {...props} />} />
       <Redirect from="/" to="/cpu/cpu-calculator" />
     </Switch>

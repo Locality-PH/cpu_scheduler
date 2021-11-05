@@ -28,7 +28,7 @@ class Home extends Component {
         "Shortest Job First, SJF (non-preemptive)",
         "Shortest Remaining Time First, SRTF (preemptive)",
         "Priority (non-preemptive)",
-        "Priority (preemptive)",
+        // "Priority (preemptive)",
       ],
       selectedCpu: "Shortest Job First, SJF (non-preemptive)",
       outputVisible: false,

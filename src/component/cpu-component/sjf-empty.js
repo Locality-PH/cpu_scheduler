@@ -112,8 +112,9 @@ class SJFEmpty extends Component {
     let startingIndex = at.indexOf(Math.min(...at))
     
     let lowestArr = []
-
+// eslint-disable-next-line
     for(var f = 0; f < l; f++){
+      // eslint-disable-next-line
       if(at[startingIndex] == at[f] && f != startingIndex - 1){
         lowestArr.push([f, at[f], bt[f]])
       }
@@ -127,8 +128,9 @@ class SJFEmpty extends Component {
 
     validatedValue.push([startingIndex, 0, 0])
     finalValue.push([startingIndex, 0, 0])
-
+// eslint-disable-next-line
     for(var i = 0; i < l; i++){
+      // eslint-disable-next-line
       if(i != startingIndex){
         validatedValue.push([i, at[i], bt[i]])
       }
@@ -158,7 +160,7 @@ class SJFEmpty extends Component {
     remainingArr.sort(function(a, b) {
       return a[1] - b[1];
     });
-
+// eslint-disable-next-line
     if(remainingArr.length != 0){
       finalValue = [...finalValue, ...remainingArr]
       // console.log("concat")
@@ -184,7 +186,9 @@ class SJFEmpty extends Component {
         finalValue.push([ct, bt[indexList[i][0]], pid[indexList[i][0]]])
       }
       else if(ct <= indexList[i][1]){
+
         let isWaiting = true
+        // eslint-disable-next-line
         if(isWaiting == true){
           ct = Math.abs(ct - [indexList[i][1]])
           finalValue.push([indexList[i][1], bt[indexList[i][0]], "-"])
@@ -276,7 +280,7 @@ class SJFEmpty extends Component {
     for(var i = 0; i < gc.length;i++){
       let gcColor = colortag[(i) % 10]
       let p = "P" + gc[i][2][0]
-
+// eslint-disable-next-line
       if(gc[i][2][0] != "-"){
         finalValue.push({
           color: gcColor,
@@ -303,6 +307,7 @@ class SJFEmpty extends Component {
     })
 
     for(var q = 0; q < gc.length; q++){
+      // eslint-disable-next-line
       if(gc[q][2][0] != "-"){
         newPID.push(gc[q][2][0])
       }
@@ -337,21 +342,21 @@ class SJFEmpty extends Component {
       });
       
     }
-
+// eslint-disable-next-line
     for (var i = 0; i < gc.length; i++) {
       let gcColor = colortag[(i) % 10]
       let p = "P" + gc[i][2][0]
       let start
       let duration
       let end = gc[i][0]
-
+// eslint-disable-next-line
       if(i == 0){
         start = at[i]
       }
       else{
         start = gc[i - 1][0]
       }
-
+// eslint-disable-next-line
       if(gc[i][2][0] == "-"){
         gcColor = "grey"
         p = "-"

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Table } from "antd";
+// eslint-disable-next-line
 let colortag = ["#0085c3","#7ab800","#f2af00", "#dc5034","#ce1126","#0085c3"]
 
 class PriorityPreempty extends Component {

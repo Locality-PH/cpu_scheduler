@@ -10,6 +10,7 @@ let processID = [];
 let waitingTime = [];
 let turnAroundTime = [];
 let finishTime = [];
+// eslint-disable-next-line
 let colortag = [
   "#0085c3",
   "#7ab800",
@@ -31,6 +32,7 @@ let tmpsum1, tmpsum2;
 let test=-1;
 
 let numbers = [];
+// eslint-disable-next-line
 const listItems = numbers.map((number) =>
   <li>{number}</li>
 );
@@ -121,6 +123,7 @@ class PriorityEmpty extends Component {
         count += 1;
         blank += 1;
         // PUSH BLANK TIME TO GANTTCHART
+        // eslint-disable-next-line
         if (at[i] == count) {
           letGanttChart.push({
             value: blank,
@@ -138,6 +141,7 @@ class PriorityEmpty extends Component {
           empty -= 1;
           
           //PROCESS END PUSH TO GANTCHART
+          // eslint-disable-next-line
           if (empty == 0) {
             n = false;
             blank = 0;
@@ -160,6 +164,7 @@ class PriorityEmpty extends Component {
     //RESET
     count = 0;
     empty = 0;
+    // eslint-disable-next-line
     for (var i = 0; i < length; i++) {
       sum1 += turnAroundTime[i];
       sum2 += waitingTime[i];

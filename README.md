@@ -23,9 +23,6 @@ A Web application that can calculate and generate data such as TurnAroundTime an
 
 Install `npm` from [here](https://nodejs.org/en/download/) before proceeding to run the application.
 * npm
-  ```sh
-  npm install npm@latest -g
-  ```
 
 ### Installation
 

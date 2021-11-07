@@ -3,7 +3,7 @@
 
 <!-- ABOUT THE PROJECT -->
 
-### CPU SCHEDULING CALCULATOR
+### CPU SCHEDULING CALCULATOR (PROJECT)
 
 [![process-scheduling-solver](https://raw.githubusercontent.com/Locality-PH/cpu_scheduler/main/src/screenshot/CPU_SCHEDULER.png)](https://www.cpu-scheduler-ph.gq)
 

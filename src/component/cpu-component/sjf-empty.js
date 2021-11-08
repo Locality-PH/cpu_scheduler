@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Table , Row, Col} from "antd";
 import { BsSquareFill } from 'react-icons/bs';
 
+// Global Variable
 let arrival;
 let burst;
 let length;

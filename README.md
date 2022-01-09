@@ -60,6 +60,7 @@ Install `npm` from [here](https://nodejs.org/en/download/) before proceeding to 
 * Shortest Job First, SJF (non-preemptive)
 
 
-
+### P.S
+Use it as you like, your free to use this web app for your own purposes
 
 

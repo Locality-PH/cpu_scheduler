@@ -3,7 +3,7 @@
 
 <!-- ABOUT THE PROJECT -->
 
-### CPU SCHEDULING CALCULATOR
+### CPU SCHEDULING CALCULATOR (PROJECT)
 
 [![process-scheduling-solver](https://raw.githubusercontent.com/Locality-PH/cpu_scheduler/main/src/screenshot/CPU_SCHEDULER.png)](https://www.cpu-scheduler-ph.gq)
 
@@ -23,9 +23,6 @@ A Web application that can calculate and generate data such as TurnAroundTime an
 
 Install `npm` from [here](https://nodejs.org/en/download/) before proceeding to run the application.
 * npm
-  ```sh
-  npm install npm@latest -g
-  ```
 
 ### Installation
 
@@ -63,6 +60,7 @@ Install `npm` from [here](https://nodejs.org/en/download/) before proceeding to 
 * Shortest Job First, SJF (non-preemptive)
 
 
-
+### P.S
+Use it as you like, your free to use this web app for your own purposes
 
 

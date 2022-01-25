@@ -362,7 +362,7 @@ class Home extends Component {
               <ins
                 className="adsbygoogle"
                 data-ad-client="ca-pub-2938262337341792"
-                data-ad-slot="6727899180"
+                data-ad-slot="2541759083"
                 data-ad-format="auto"
                 data-full-width-responsive="true"
                 style={{ display: "inline-block", height: 250, width: "100%" }}

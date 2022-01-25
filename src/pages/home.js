@@ -108,9 +108,7 @@ class Home extends Component {
 
         // console.log("length "+ priority.split(' ').length)
 
-        if (
-          arrival.split(" ").length === burst.split(" ").length 
-        ) {
+        if (arrival.split(" ").length === burst.split(" ").length) {
           message
             .loading("Calculation in progress..", 1.5)
             .then(() => message.success("Loading finished", 1.5));
@@ -160,10 +158,15 @@ class Home extends Component {
       message.error("Must be an Integer!", 2.5);
     }
   }
+  componentDidMount() {
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+  }
 
   render() {
     // console.log("parent")
     // console.log(this.state.ganttchart)
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>;
+
     return (
       <>
         <div className="site-card-wrapper">
@@ -271,8 +274,9 @@ class Home extends Component {
                                 .filter((word) => word !== "")}
                               updateGanttChart={{
                                 ganttchart: this.state.ganttchart,
-                                selectGanttChart:
-                                  this.selectGanttChart.bind(this),
+                                selectGanttChart: this.selectGanttChart.bind(
+                                  this
+                                ),
                               }}
                             />
                           </div>
@@ -296,8 +300,9 @@ class Home extends Component {
                                 .filter((word) => word !== "")}
                               updateGanttChart={{
                                 ganttchart: this.state.ganttchart,
-                                selectGanttChart:
-                                  this.selectGanttChart.bind(this),
+                                selectGanttChart: this.selectGanttChart.bind(
+                                  this
+                                ),
                               }}
                             />
                           </div>
@@ -317,8 +322,9 @@ class Home extends Component {
                                 .filter((word) => word !== "")}
                               updateGanttChart={{
                                 ganttchart: this.state.ganttchart,
-                                selectGanttChart:
-                                  this.selectGanttChart.bind(this),
+                                selectGanttChart: this.selectGanttChart.bind(
+                                  this
+                                ),
                               }}
                             />
                           </div>
@@ -338,8 +344,9 @@ class Home extends Component {
                                 .filter((word) => word !== "")}
                               updateGanttChart={{
                                 ganttchart: this.state.ganttchart,
-                                selectGanttChart:
-                                  this.selectGanttChart.bind(this),
+                                selectGanttChart: this.selectGanttChart.bind(
+                                  this
+                                ),
                               }}
                             />
                           </div>
@@ -351,7 +358,16 @@ class Home extends Component {
               </Card>
             </Col>
 
-            <Col xs={24} sm={24} md={3} xl={3}></Col>
+            <Col xs={24} sm={24} md={24} xl={24}>
+              <ins
+                className="adsbygoogle"
+                data-ad-client="ca-pub-2938262337341792"
+                data-ad-slot="6727899180"
+                data-ad-format="auto"
+                data-full-width-responsive="true"
+                style={{ display: "inline-block", height: 250, width: 300 }}
+              />
+            </Col>
           </Row>
         </div>
       </>

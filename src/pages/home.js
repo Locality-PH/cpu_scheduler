@@ -365,7 +365,7 @@ class Home extends Component {
                 data-ad-slot="6727899180"
                 data-ad-format="auto"
                 data-full-width-responsive="true"
-                style={{ display: "inline-block", height: 250, width: 300 }}
+                style={{ display: "inline-block", height: 250, width: "100%" }}
               />
             </Col>
           </Row>

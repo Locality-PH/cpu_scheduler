@@ -246,7 +246,7 @@ class Home extends Component {
                 </Space>
               </Card>
             </Col>
-            <Col xs={24} sm={24} md={13} xl={13}>
+            <Col style={{ marginTop: "10px" }} xs={24} sm={24} md={13} xl={13}>
               <Card title="Output" className="shadow-box">
                 {this.state.outputVisible === true ? (
                   <div>

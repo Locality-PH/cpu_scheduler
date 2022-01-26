@@ -171,15 +171,9 @@ class Home extends Component {
       <>
         <div className="site-card-wrapper">
           <Row gutter={16}>
-            <Col
-              style={{ marginTop: "10px" }}
-              xs={24}
-              sm={24}
-              md={3}
-              xl={3}
-            ></Col>
+            <Col xs={24} sm={24} md={3} xl={3}></Col>
 
-            <Col xs={24} sm={24} md={5} xl={5}>
+            <Col style={{ marginTop: "10px" }} xs={24} sm={24} md={5} xl={5}>
               <Card size="large" title="Input" className="shadow-box">
                 <Space size={20} direction="vertical">
                   <div className="p-3 form-group gap-text">

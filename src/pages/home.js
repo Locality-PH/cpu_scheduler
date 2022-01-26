@@ -171,9 +171,16 @@ class Home extends Component {
       <>
         <div className="site-card-wrapper">
           <Row gutter={16}>
-            <Col xs={24} sm={24} md={3} xl={3}></Col>
+            <Col xs={24} sm={24} md={24} xl={3} xxl={3}></Col>
 
-            <Col style={{ marginTop: "10px" }} xs={24} sm={24} md={5} xl={5}>
+            <Col
+              style={{ marginTop: "10px" }}
+              xs={24}
+              sm={24}
+              md={24}
+              xl={5}
+              xxl={5}
+            >
               <Card size="large" title="Input" className="shadow-box">
                 <Space size={20} direction="vertical">
                   <div className="p-3 form-group gap-text">
@@ -246,7 +253,14 @@ class Home extends Component {
                 </Space>
               </Card>
             </Col>
-            <Col style={{ marginTop: "10px" }} xs={24} sm={24} md={13} xl={13}>
+            <Col
+              style={{ marginTop: "10px" }}
+              xs={24}
+              sm={24}
+              md={24}
+              xl={13}
+              xxl={13}
+            >
               <Card title="Output" className="shadow-box">
                 {this.state.outputVisible === true ? (
                   <div>
@@ -358,7 +372,7 @@ class Home extends Component {
               </Card>
             </Col>
 
-            <Col xs={24} sm={24} md={24} xl={24}>
+            <Col style={{ marginTop: "10px" }} xs={24} sm={24} md={24} xl={24}>
               <ins
                 className="adsbygoogle"
                 data-ad-client="ca-pub-2938262337341792"

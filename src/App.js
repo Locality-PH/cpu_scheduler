@@ -1,7 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
-
+import logo from "./logo.svg";
+import "./App.css";
+import React, { useEffect } from "react";
 function App() {
+  useEffect(() => {
+    (window.adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-2938262337341792",
+      enable_page_level_ads: true,
+    });
+  });
   return (
     <div className="App">
       <header className="App-header">

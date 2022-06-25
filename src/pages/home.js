@@ -158,23 +158,23 @@ class Home extends Component {
       message.error("Must be an Integer!", 2.5);
     }
   }
-  componentDidMount() {
-    const installGoogleAds = () => {
-      const elem = document.createElement("script");
-      elem.src =
-        "//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2938262337341792";
-      elem.async = true;
-      elem.defer = true;
-      document.body.insertBefore(elem, document.body.firstChild);
-    };
-    installGoogleAds();
-    (window.adsbygoogle = window.adsbygoogle || []).push({});
-  }
+  // componentDidMount() {
+  //   const installGoogleAds = () => {
+  //     const elem = document.createElement("script");
+  //     elem.src =
+  //       "//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2938262337341792";
+  //     elem.async = true;
+  //     elem.defer = true;
+  //     document.body.insertBefore(elem, document.body.firstChild);
+  //   };
+  //   installGoogleAds();
+  //   (window.adsbygoogle = window.adsbygoogle || []).push({});
+  // }
 
   render() {
     // console.log("parent")
     // console.log(this.state.ganttchart)
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>;
+    // <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>;
 
     return (
       <>

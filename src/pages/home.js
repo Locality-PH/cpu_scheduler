@@ -159,6 +159,15 @@ class Home extends Component {
     }
   }
   componentDidMount() {
+      const installGoogleAds = () => {
+      const elem = document.createElement("script");
+      elem.src =
+        "//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2938262337341792";
+      elem.async = true;
+      elem.defer = true;
+      document.body.insertBefore(elem, document.body.firstChild);
+    };
+    installGoogleAds();
     (window.adsbygoogle = window.adsbygoogle || []).push({});
   }
 

@@ -390,12 +390,12 @@ class Home extends Component {
                 data-full-width-responsive="true"
                 style={{ display: "inline-block", height: 250, width: "100%" }}
               />
-              <AdSense.Google
+              {/* <AdSense.Google
                 client="ca-pub-2938262337341792"
                 slot="2541759083"
                 style={{ display: "inline-block", height: 250, width: "100%" }}
                 format=""
-              />
+              /> */}
             </Col>
           </Row>
         </div>

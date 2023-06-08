@@ -5,7 +5,7 @@
 
 ### CPU SCHEDULING CALCULATOR (PROJECT)
 
-[![process-scheduling-solver](https://raw.githubusercontent.com/Locality-PH/cpu_scheduler/main/src/screenshot/CPU_SCHEDULER.png)](https://www.cpu-scheduler-ph.gq)
+[![process-scheduling-solver](https://raw.githubusercontent.com/Locality-PH/cpu_scheduler/main/src/screenshot/mockup.png)](https://www.cpu-scheduler-ph.gq)
 
 A Web application that can calculate and generate data such as TurnAroundTime and WaitingTime to ganttchart and table with various algorithm.
 
